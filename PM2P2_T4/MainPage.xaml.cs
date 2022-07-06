@@ -1,5 +1,6 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
+using PM2P2_T4.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +16,7 @@ namespace PM2P2_T4
     {
 
         MediaFile FileVideo;
+        Video video = null;
 
         public MainPage()
         {
@@ -27,35 +29,75 @@ namespace PM2P2_T4
         {
             try
             {
+
+                var name = DateTime.Now.ToString("yyyy'-'MM'-'dd'_'HHmmss") + ".mp4";
+
                 FileVideo = await CrossMedia.Current.TakeVideoAsync(new Plugin.Media.Abstractions.StoreVideoOptions
                 {
                     SaveToAlbum = true,
-                    Name = DateTime.Now.ToString("yyyy'-'MM'-'dd'_'HHmmss") + ".mp4",
+                    Name = name,
                     Directory = "MisVideos"
-                    
+
                 });
 
                 if (FileVideo == null)
                     return;
 
-                //await DisplayAlert("Direcctorio", FileVideo.Path, "OK");
 
                 mediaElement.Source = FileVideo.Path;
+                
+                await DisplayAlert("Video guardado en storage", "Path: " + FileVideo.Path, "OK");
+
+                video = new Video
+                {
+                    Id = 0,
+                    Name = name,
+                    Path = FileVideo.Path,
+                    Date = DateTime.Now
+                };
 
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
-
-
-
             
         }
 
-        private void btnGuardarVideo_Clicked(object sender, EventArgs e)
+        private async void btnGuardarVideo_Clicked(object sender, EventArgs e)
         {
+            try
+            {
+                if (FileVideo == null)
+                {
+                    await DisplayAlert("Aviso", "Debe tomar un video", "OK");
+                    return;
+                }
 
+                var result = await App.DBase.insertUpdateVideo(video);
+
+                if (result > 0)
+                {
+                    await DisplayAlert("Aviso", "Video guardado en base de datos", "OK");
+
+                    FileVideo = null;
+                    video = null;
+                    mediaElement.Source = null;
+                }
+                else
+                    await DisplayAlert("Aviso", "El video no se pudo guardar en la base de datos", "OK");
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+            
+        }
+
+        private async void btnlista_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new View.ListPage());
         }
     }
 }

@@ -8,6 +8,7 @@
         <Grid>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="300"/>
             </Grid.RowDefinitions>
@@ -18,14 +19,21 @@
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
 
+            <Frame  BackgroundColor="#687FC7" Padding="5" Grid.Row="0" Grid.ColumnSpan="3">
+                <Label Text="Pantalla Principal" 
+                       HorizontalOptions="CenterAndExpand"
+                       FontSize="25"
+                       TextColor="White"
+                       />
+            </Frame>
 
 
-            <Frame Grid.Row="0" Grid.Column="1"  Padding="0" Margin="0,40,0,0">
+            <Frame Grid.Row="1" Grid.Column="1"  Padding="0" Margin="0,40,0,0">
                 <xct:MediaElement 
                        x:Name="mediaElement" 
                        BackgroundColor="Gray" 
                        AutoPlay="False"
-                        Aspect="AspectFill"
+                       Aspect="AspectFill"
                        ShowsPlaybackControls="True"
                     />
                 
@@ -33,13 +41,15 @@
             
             
 
-            <StackLayout Grid.Row="1" Grid.Column="1">
+            <StackLayout Grid.Row="2" Grid.Column="1">
 
 
                 <StackLayout Orientation="Horizontal"  Margin="0,30,0,0">
                     <Button x:Name="btnTomarVideo" Text="Tomar Video" HorizontalOptions="FillAndExpand" Clicked="btnTomarVideo_Clicked"/>
                     <Button x:Name="btnGuardarVideo" Text="Guardar video" HorizontalOptions="FillAndExpand" Clicked="btnGuardarVideo_Clicked" />
                 </StackLayout>
+
+                <Button x:Name="btnlista" Text="Lista de videos" HorizontalOptions="FillAndExpand" Clicked="btnlista_Clicked"/>
 
             </StackLayout>
         </Grid>

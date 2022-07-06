@@ -19,6 +19,10 @@ namespace PM2P2_T4.Services
             dbase.CreateTableAsync<Video>();
         }
 
+        public DataBase()
+        {
+        }
+
         #region OperacionesVideo
         //Metodos CRUD - CREATE
         public Task<int> insertUpdateVideo(Video video)
